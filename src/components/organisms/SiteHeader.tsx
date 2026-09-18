@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Button } from "@/components/atoms/Button";
 import { Logo } from "@/components/atoms/Logo";
 import { navLinks } from "@/lib/mock-data";
@@ -27,13 +29,15 @@ export function SiteHeader() {
       <div className="flex-1" />
 
       <div className="flex items-center gap-3">
-        <a
-          href="#"
+        <Link
+          href="/login"
           className="rounded-sm px-2.5 py-2 text-label font-medium text-white/74 hover:bg-white/12 hover:text-white hover:no-underline"
         >
           Log in
-        </a>
-        <Button variant="onDark">Get started</Button>
+        </Link>
+        <Button variant="onDark" href="/login">
+          Get started
+        </Button>
       </div>
     </header>
   );

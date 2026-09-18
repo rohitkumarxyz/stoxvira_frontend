@@ -1,9 +1,12 @@
-import type { ComponentPropsWithoutRef } from "react";
+import Link from "next/link";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 type Variant = "primary" | "onDark" | "outlineOnDark" | "ghost";
 
 type ButtonProps = ComponentPropsWithoutRef<"button"> & {
   variant?: Variant;
+  /** When set, renders as a Next.js Link styled identically to the button. */
+  href?: string;
 };
 
 /**
@@ -23,13 +26,23 @@ export function Button({
   variant = "primary",
   className = "",
   type = "button",
+  href,
+  children,
   ...props
 }: ButtonProps) {
+  const classes = `inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-sm px-4 py-2 text-body font-medium transition-colors duration-[120ms] ease-standard ${VARIANTS[variant]} ${className}`;
+
+  if (href) {
+    return (
+      <Link href={href} className={classes}>
+        {children as ReactNode}
+      </Link>
+    );
+  }
+
   return (
-    <button
-      type={type}
-      className={`inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-sm px-4 py-2 text-body font-medium transition-colors duration-[120ms] ease-standard ${VARIANTS[variant]} ${className}`}
-      {...props}
-    />
+    <button type={type} className={classes} {...props}>
+      {children}
+    </button>
   );
 }
