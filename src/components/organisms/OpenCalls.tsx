@@ -1,6 +1,10 @@
+"use client";
+
 import { Container } from "@/components/atoms/Container";
 import { CALL_GRID, CallRow } from "@/components/molecules/CallRow";
 import { SectionHeading } from "@/components/molecules/SectionHeading";
+import { useQuotes } from "@/components/providers/MarketDataProvider";
+import { formatPrice } from "@/lib/market";
 import { picks } from "@/lib/mock-data";
 
 const COLUMNS = [
@@ -15,6 +19,8 @@ const COLUMNS = [
 ];
 
 export function OpenCalls() {
+  const quotes = useQuotes();
+
   return (
     <Container as="section" className="pt-16">
       <SectionHeading
@@ -43,9 +49,21 @@ export function OpenCalls() {
             ))}
           </div>
 
-          {picks.map((pick, i) => (
-            <CallRow key={pick.ticker} pick={pick} index={i} />
-          ))}
+          {picks.map((pick, i) => {
+            const live = quotes[pick.ticker];
+
+            // Only PRICE is real. Verdict, score, target and horizon are model
+            // output — there is no model yet, so they stay as designed.
+            return (
+              <CallRow
+                key={pick.ticker}
+                pick={
+                  live ? { ...pick, price: formatPrice(live.last_price) } : pick
+                }
+                index={i}
+              />
+            );
+          })}
         </div>
       </div>
     </Container>

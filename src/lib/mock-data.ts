@@ -1,13 +1,18 @@
-/**
- * Placeholder content for the marketing screens, lifted verbatim from the
- * design export. Every screen takes this as props, so replacing it with a
- * Mongo query later is a change in one place per page, not in the components.
- */
+// Placeholder content for the marketing screens, taken from the design
+// export. Screens read it as props, so swapping in a Mongo query later is one
+// change per page rather than a change in every component.
+//
+// Prices and index levels are a fallback only. Live values come from the
+// Python backend (lib/market.ts); these render when the backend is down or
+// the Upstox token has expired. Verdicts, scores, targets and the track
+// record are still made up, since no market feed supplies those.
 
 export type Verdict = "Bullish" | "Bearish" | "Neutral";
 export type Tone = "Positive" | "Neutral" | "Negative";
 
 export type TickerQuote = {
+  // Upstox symbol used to fetch the live value.
+  symbol: string;
   name: string;
   value: string;
   change: string;
@@ -15,7 +20,7 @@ export type TickerQuote = {
 };
 
 export type IndexQuote = TickerQuote & {
-  /** Polyline points on a 0 0 60 32 viewBox. */
+  // Polyline points on a 0 0 60 32 viewBox. Still mock.
   points: string;
 };
 
@@ -69,18 +74,66 @@ export type ScoreFactor = {
   body: string;
 };
 
+/**
+ * USD/INR used to sit in this tape. Upstox has no spot instrument for it,
+ * only dated futures, so it cannot be quoted live. NIFTY 500 replaces it
+ * rather than leaving one invented number among six real ones.
+ */
 export const ticker: TickerQuote[] = [
-  { name: "NIFTY 50", value: "24,812.40", change: "+0.42%", up: true },
-  { name: "SENSEX", value: "81,246.18", change: "+0.38%", up: true },
-  { name: "BANK NIFTY", value: "52,104.65", change: "+0.61%", up: true },
-  { name: "NIFTY IT", value: "41,388.20", change: "+1.24%", up: true },
-  { name: "NIFTY MIDCAP 100", value: "58,940.75", change: "-0.18%", up: false },
-  { name: "USD / INR", value: "83.42", change: "-0.06%", up: false },
-  { name: "INDIA VIX", value: "12.84", change: "-2.10%", up: false },
+  {
+    symbol: "NIFTY 50",
+    name: "NIFTY 50",
+    value: "24,812.40",
+    change: "+0.42%",
+    up: true,
+  },
+  {
+    symbol: "SENSEX",
+    name: "SENSEX",
+    value: "81,246.18",
+    change: "+0.38%",
+    up: true,
+  },
+  {
+    symbol: "NIFTY BANK",
+    name: "BANK NIFTY",
+    value: "52,104.65",
+    change: "+0.61%",
+    up: true,
+  },
+  {
+    symbol: "NIFTY IT",
+    name: "NIFTY IT",
+    value: "41,388.20",
+    change: "+1.24%",
+    up: true,
+  },
+  {
+    symbol: "NIFTY MIDCAP 100",
+    name: "NIFTY MIDCAP 100",
+    value: "58,940.75",
+    change: "-0.18%",
+    up: false,
+  },
+  {
+    symbol: "NIFTY 500",
+    name: "NIFTY 500",
+    value: "22,914.30",
+    change: "+0.29%",
+    up: true,
+  },
+  {
+    symbol: "INDIA VIX",
+    name: "INDIA VIX",
+    value: "12.84",
+    change: "-2.10%",
+    up: false,
+  },
 ];
 
 export const indices: IndexQuote[] = [
   {
+    symbol: "NIFTY 50",
     name: "NIFTY 50",
     value: "24,812.40",
     change: "+0.42%",
@@ -88,6 +141,7 @@ export const indices: IndexQuote[] = [
     points: "0,28 20,26 40,29 60,22 80,24 100,18 120,20 140,12 160,9",
   },
   {
+    symbol: "NIFTY BANK",
     name: "BANK NIFTY",
     value: "52,104.65",
     change: "+0.61%",
@@ -95,6 +149,7 @@ export const indices: IndexQuote[] = [
     points: "0,30 20,27 40,28 60,20 80,22 100,16 120,17 140,11 160,7",
   },
   {
+    symbol: "NIFTY IT",
     name: "NIFTY IT",
     value: "41,388.20",
     change: "+1.24%",
@@ -102,6 +157,7 @@ export const indices: IndexQuote[] = [
     points: "0,32 20,30 40,24 60,26 80,18 100,20 120,13 140,10 160,5",
   },
   {
+    symbol: "NIFTY MIDCAP 100",
     name: "NIFTY MIDCAP 100",
     value: "58,940.75",
     change: "-0.18%",
@@ -112,8 +168,10 @@ export const indices: IndexQuote[] = [
 
 export const picks: Pick[] = [
   {
-    name: "Tata Motors",
-    ticker: "TATAMOTORS",
+    // Tata Motors demerged: TMPV is the passenger-vehicle entity, TMCV the
+    // commercial one. The old TATAMOTORS symbol no longer trades.
+    name: "Tata Motors Passenger",
+    ticker: "TMPV",
     cap: "Large cap",
     verdict: "Bullish",
     score: 81,
@@ -262,8 +320,8 @@ export const moverGroups: MoverGroup[] = [
         up: true,
       },
       {
-        name: "Tata Motors",
-        ticker: "TATAMOTORS",
+        name: "Tata Motors Passenger",
+        ticker: "TMPV",
         price: "₹ 1,048",
         change: "+2.4%",
         verdict: "Bullish",
@@ -336,8 +394,9 @@ export const moverGroups: MoverGroup[] = [
         up: true,
       },
       {
-        name: "Zomato",
-        ticker: "ZOMATO",
+        // Zomato renamed itself Eternal; ZOMATO is no longer a live symbol.
+        name: "Eternal",
+        ticker: "ETERNAL",
         price: "₹ 301",
         change: "+0.9%",
         verdict: "Neutral",

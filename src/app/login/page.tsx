@@ -107,7 +107,10 @@ export default function LoginPage() {
         throw new Error(data?.message ?? "Something went wrong. Try again.");
       }
 
-      router.push("/");
+      router.push("/dashboard");
+      // The header reads the session on the server, so it needs a re-render
+      // to swap "Log in" for the user menu.
+      router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
@@ -236,14 +239,6 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 autoComplete="new-password"
               />
-            )}
-
-            {!isSignup && (
-              <div className="-mt-2 flex justify-end">
-                <a href="#" className="text-label font-medium text-brand">
-                  Forgot password?
-                </a>
-              </div>
             )}
 
             {error && (

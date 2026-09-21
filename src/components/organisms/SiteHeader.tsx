@@ -2,10 +2,14 @@ import Link from "next/link";
 
 import { Button } from "@/components/atoms/Button";
 import { Logo } from "@/components/atoms/Logo";
+import { UserMenu } from "@/components/molecules/UserMenu";
+import { getSession } from "@/lib/auth";
 import { navLinks } from "@/lib/mock-data";
 
 /** Sticky dark chrome. The brand green at 97% with a blur behind it. */
-export function SiteHeader() {
+export async function SiteHeader() {
+  const session = await getSession();
+
   return (
     <header className="sticky top-0 z-20 flex flex-wrap items-center gap-x-4.5 gap-y-3 bg-brand/97 px-6 py-3.5 shadow-[inset_0_-1px_0_rgb(255_255_255/0.08)] backdrop-blur-[10px]">
       <a href="#" className="flex items-center hover:no-underline">
@@ -28,17 +32,21 @@ export function SiteHeader() {
 
       <div className="flex-1" />
 
-      <div className="flex items-center gap-3">
-        <Link
-          href="/login"
-          className="rounded-sm px-2.5 py-2 text-label font-medium text-white/74 hover:bg-white/12 hover:text-white hover:no-underline"
-        >
-          Log in
-        </Link>
-        <Button variant="onDark" href="/login">
-          Get started
-        </Button>
-      </div>
+      {session ? (
+        <UserMenu name={session.name} email={session.email} />
+      ) : (
+        <div className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="rounded-sm px-2.5 py-2 text-label font-medium text-white/74 hover:bg-white/12 hover:text-white hover:no-underline"
+          >
+            Log in
+          </Link>
+          <Button variant="onDark" href="/login">
+            Get started
+          </Button>
+        </div>
+      )}
     </header>
   );
 }
