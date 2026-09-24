@@ -6,6 +6,7 @@
 export type NavIconName =
   | "overview"
   | "chart"
+  | "predict"
   | "ai"
   | "research"
   | "profile";
@@ -24,6 +25,16 @@ const PATHS: Record<NavIconName, React.ReactNode> = {
     <>
       <path d="M3 17 8 11l4 3 8-9" />
       <path d="M16 5h4v4" />
+    </>
+  ),
+  // A trend line that turns dashed past "today" — where known data ends and
+  // the forecast begins.
+  predict: (
+    <>
+      <path d="M3 16.5 8 11l3.5 3 3-3.2" />
+      <circle cx="14.5" cy="10.8" r="1.15" fill="currentColor" stroke="none" />
+      <path d="M16.3 9 20.5 4.5" strokeDasharray="2.4 2.2" />
+      <path d="M20.5 7.3V4.5h-2.8" />
     </>
   ),
   ai: (

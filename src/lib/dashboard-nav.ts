@@ -11,6 +11,7 @@ export type NavItem = {
 export const DASHBOARD_NAV: NavItem[] = [
   { href: "/dashboard", label: "Overview", icon: "overview" },
   { href: "/dashboard/chart", label: "Chart", icon: "chart" },
+  { href: "/dashboard/predictions", label: "Predictions", icon: "predict" },
   { href: "/dashboard/ai", label: "Stoxvira AI", icon: "ai" },
   { href: "/dashboard/research", label: "Research", icon: "research" },
 ];
